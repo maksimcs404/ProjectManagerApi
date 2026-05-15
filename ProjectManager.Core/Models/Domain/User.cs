@@ -19,15 +19,15 @@ namespace ProjectManager.Core.Models.Domain
         public DateTime? CreatedAt { get; }
         public List<ProjectMember> ProjectMembers { get; } = null!;
 
-        private User (int id, string name, string password)
+        private User (int id, string name, string password, DateTime createdAt)
         {
             Id = id;
             Name = name;
             Password = password;
-            CreatedAt = DateTime.Now;
+            CreatedAt = createdAt;
         }
 
-        public static Result<User> Create(string name, string password)
+        public static Result<User> Create(string name, string password, DateTime createdAt)
         {
             // Name validation
             if (string.IsNullOrWhiteSpace(name))
@@ -42,7 +42,7 @@ namespace ProjectManager.Core.Models.Domain
                 return Result<User>.Fail("Password cannot be empty.");
 
 
-            var user = new User(0, name, password);
+            var user = new User(0, name, password, createdAt);
             return Result<User>.Ok(user);
         } 
     }
