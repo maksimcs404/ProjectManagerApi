@@ -7,7 +7,7 @@ using System.Text;
 
 namespace ProjectManager.Core.Models.Domain
 {
-    public class ProjectTask : IEntity
+    public class ProjectTask : IEntity 
     {
         private const int MinTitleLength = 3;
         private const int MaxTitleLength = 32;
@@ -20,13 +20,12 @@ namespace ProjectManager.Core.Models.Domain
         public Common.Enums.TaskStatus Status { get; private set; }
         public TaskPriority Priority { get; private set; }
         public int ProjectId { get; private set; }
-        public int OwnerId { get; private set; }
         public DateTime CreatedAt { get; private set; }
-        //public List<TaskMember> TaskMembers { get; }
-        public List<Comment> Comments { get; } = null!;
-        public Project Project { get; } = null!;
+        public List<TaskMember> TaskMembers { get; private set; } = new();
+        public List<Comment> Comments { get; private set; } = new();
+        public Project Project { get; private set; }
 
-        private ProjectTask(int id, DateTime? deadLine, string title, string? description, int projectId, int ownerId, DateTime createdAt,
+        private ProjectTask(int id, DateTime? deadLine, string title, string? description, int projectId, DateTime createdAt,
             Common.Enums.TaskStatus status, TaskPriority priority)
         {
             Id = id;
@@ -34,7 +33,6 @@ namespace ProjectManager.Core.Models.Domain
             Title = title;
             Description = description;
             ProjectId = projectId;
-            OwnerId = ownerId;
             CreatedAt = createdAt;
             Status = status;
             Priority = priority;
@@ -53,7 +51,7 @@ namespace ProjectManager.Core.Models.Domain
             if (description != null && description.Length > MaxDescriptionLength)
                 return Result<ProjectTask>.Fail("Description cannot exceed 256 characters.");
 
-            var task = new ProjectTask(0, deadLine, title, description, projectId, ownerId, DateTime.Now, status, priority);
+            var task = new ProjectTask(0, deadLine, title, description, projectId, DateTime.Now, status, priority);
             return Result<ProjectTask>.Ok(task);
         }
     }
