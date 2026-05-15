@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ProjectManager.Core.Models.Domain;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -19,6 +20,25 @@ namespace ProjectManager.Data.Context
         public DbSet<Core.Models.Domain.ProjectMember> ProjectMembers { get; set; }
         public DbSet<Core.Models.Domain.Comment> Comments { get; set; }
         public DbSet<Core.Models.Domain.CommentLike> CommentLikes { get; set; }
+
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<ProjectTask>()
+                .HasOne(pt => pt.Project)
+                .WithMany(p => p.ProjectTasks)
+                .HasForeignKey(p => p.ProjectId);
+
+            modelBuilder.Entity<ProjectMember>()
+                .HasOne(pm => pm.User)
+                .WithMany(u => u.ProjectMembers);
+
+            modelBuilder.Entity<ProjectMember>()
+                .HasOne(pm => pm.Project)
+                .WithMany(p => p.ProjectMembers);
+        }
 
 
     }

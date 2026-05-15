@@ -13,21 +13,24 @@ namespace ProjectManager.Core.Models.Domain
         private const int MinNameLength = 3;
         private const int MaxNameLength = 32;
   
-        public int Id { get; }
-        public string Name { get; } = string.Empty;
-        public string Password { get; }
-        public DateTime? CreatedAt { get; }
-        public List<ProjectMember> ProjectMembers { get; } = null!;
-
-        private User (int id, string name, string password, DateTime createdAt)
+        public int Id { get; private set; }
+        public string Name { get; private set; } = string.Empty;
+        public string UserName { get; private set; } = null!;
+        public string Password { get; private set; }
+        public DateTime? CreatedAt { get; private set; }
+        public List<ProjectMember> ProjectMembers { get; private set; } = null!;
+        
+        protected User() { }
+        private User (int id, string name, string userName, string password, DateTime? createdAt)
         {
             Id = id;
             Name = name;
             Password = password;
             CreatedAt = createdAt;
+            UserName = userName;
         }
 
-        public static Result<User> Create(string name, string password, DateTime createdAt)
+        public static Result<User> Create(string name, string userName,string password, DateTime createdAt)
         {
             // Name validation
             if (string.IsNullOrWhiteSpace(name))
@@ -42,7 +45,7 @@ namespace ProjectManager.Core.Models.Domain
                 return Result<User>.Fail("Password cannot be empty.");
 
 
-            var user = new User(0, name, password, createdAt);
+            var user = new User(0, name, userName, password, createdAt);
             return Result<User>.Ok(user);
         } 
     }

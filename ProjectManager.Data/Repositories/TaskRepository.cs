@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace ProjectManager.Data.Repositories
+
 {
-    internal class TaskRepository : ITaskRepository
+    //TODO: Доделать
+    /*internal class TaskRepository : ITaskRepository
     {
-    }
+    }*/
 }

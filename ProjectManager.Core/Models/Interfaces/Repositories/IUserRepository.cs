@@ -9,6 +9,6 @@ namespace ProjectManager.Core.Models.Interfaces.Repositories
 {
     public interface IUserRepository : IRepository<User>
     {
-        
+        Result<User> GetByUserName(string userName);
     }
 }

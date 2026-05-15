@@ -14,6 +14,7 @@ namespace ProjectManager.Core.Models.Domain
         public int UserId { get; private set; }
         public int ProjectId { get; private set; }
         public User User { get; private set; } = null!;
+        public Project Project { get; private set; } = null!;
 
         private ProjectMember(int id, MemberRole role, int userId, int projectId)
         {

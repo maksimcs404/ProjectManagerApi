@@ -10,7 +10,7 @@ using System.Text;
 
 namespace ProjectManager.Application.Services
 {
-    public class UserService : IService<User>
+    public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
         public UserService(IUserRepository userRepository)
@@ -22,16 +22,27 @@ namespace ProjectManager.Application.Services
         {
            return _userRepository.Get(id);          
         }
-        public List<User> GetAll()
+        public User? GetByUsername(string userName)
         {
-            return _userRepository.GetAll().ToList();
+            return _userRepository.GetByUserName(userName).Data;
+        }
+        public IEnumerable<User> GetAll()
+        {
+            return _userRepository.GetAll();
         }
 
         public Result<User> Create(CreateUserRequest userRequest)
         {
+            // Null check
             if (userRequest == null)
                 return Result<User>.Fail("User data cannot be null.");
-            var user = User.Create(userRequest.UserName, userRequest.Password, DateTime.UtcNow);
+
+
+            var existUserResult = _userRepository.GetByUserName(userRequest.UserName);
+            if (existUserResult.IsSuccess)
+                return Result<User>.Fail("User with the same username already exists.");
+
+            var user = User.Create(userRequest.Name, userRequest.UserName, userRequest.Password, DateTime.UtcNow);
             if (!user.IsSuccess)
                 return Result<User>.Fail(user.Error!);
             return _userRepository.Create(user.Data!);

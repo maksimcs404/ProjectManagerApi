@@ -9,10 +9,15 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ProjectManager.Application\ProjectManager.Application.csproj" />
     <ProjectReference Include="..\ProjectManager.Core\ProjectManager.Core.csproj" />
     <ProjectReference Include="..\ProjectManager.Data\ProjectManager.Data.csproj" />
   </ItemGroup>
