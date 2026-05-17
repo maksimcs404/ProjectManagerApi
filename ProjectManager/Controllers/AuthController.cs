@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ProjectManager.Application.DTO.Request;
 using ProjectManager.Application.Interfaces;
+using ProjectManager.Application.Services;
 using ProjectManager.Core.Models.Domain;
 
 namespace ProjectManager.Controllers
@@ -32,7 +33,8 @@ namespace ProjectManager.Controllers
             {
                 if (user.Password == loginRequest.Password)
                 {
-                    return Ok(user);
+                    var token = JwtService.GenerateToken(user);
+                    return Ok(token);
                 }
                 else
                 {

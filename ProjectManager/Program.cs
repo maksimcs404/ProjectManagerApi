@@ -4,13 +4,34 @@ using ProjectManager.Data;
 using ProjectManager.Application.Interfaces;
 using ProjectManager.Application.Services;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddDataLayer(builder.Configuration.GetConnectionString("DefaultConnection")!);
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddControllers();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = builder.Configuration["AuthOptions:Issuer"],
+            ValidateAudience = true,
+            ValidAudience = builder.Configuration["AuthOptions:Audience"],
+            ValidateLifetime = true,
+
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["AuthOptions:Key"]!))
+        };
+    });
+
 
 
 
