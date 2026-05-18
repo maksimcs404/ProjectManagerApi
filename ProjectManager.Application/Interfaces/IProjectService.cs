@@ -1,4 +1,5 @@
 ﻿using ProjectManager.Core.Models.Common;
+using ProjectManager.Core.Models.Common.Enums;
 using ProjectManager.Core.Models.Domain;
 using System;
 using System.Collections.Generic;
@@ -9,5 +10,9 @@ namespace ProjectManager.Application.Interfaces
     public interface IProjectService
     {
         Result<Project> CreateProject(int ownerId, string title, string? description);
+        Result<List<Project>> GetMyProjects(int userId);
+        Result<ProjectMember> AddMemberToProject(int projectId, int userId, MemberRole role);
+        Result<Project> GetProjectById(int projectId);
+        Result<bool> IsOwnerOfTheProject(int userId, int projectId);
     }
 }

@@ -18,6 +18,7 @@ namespace ProjectManager.Core.Models.Domain
         public int OwnerId { get; private set; }
         public string Title { get; private set; }
         public string? Description { get; private set; } = string.Empty;
+        public User Owner { get; private set; }
         public List<ProjectTask> ProjectTasks { get; set; } = null!;
         public List<ProjectMember> ProjectMembers { get; set; } = null!;
 

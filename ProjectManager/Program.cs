@@ -1,12 +1,13 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using ProjectManager.Data.Context;
-using ProjectManager.Data;
+using Microsoft.IdentityModel.Tokens;
 using ProjectManager.Application.Interfaces;
 using ProjectManager.Application.Services;
+using ProjectManager.Data;
+using ProjectManager.Data.Context;
 using System.Diagnostics;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
-using Microsoft.IdentityModel.Tokens;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +15,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDataLayer(builder.Configuration.GetConnectionString("DefaultConnection")!);
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options => 
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    });
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

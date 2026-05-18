@@ -18,6 +18,7 @@ namespace ProjectManager.Core.Models.Domain
         public string UserName { get; private set; } = null!;
         public string Password { get; private set; }
         public DateTime? CreatedAt { get; private set; }
+        public List<Project> Projects { get; set; } = new List<Project>();
         public List<ProjectMember> ProjectMembers { get; private set; } = null!;
         
         protected User() { }
@@ -31,7 +32,7 @@ namespace ProjectManager.Core.Models.Domain
         }
 
         public static Result<User> Create(string name, string userName,string password, DateTime createdAt)
-        {
+        { 
             // Name validation
             if (string.IsNullOrWhiteSpace(name))
                 return Result<User>.Fail("Name cannot be empty.");
