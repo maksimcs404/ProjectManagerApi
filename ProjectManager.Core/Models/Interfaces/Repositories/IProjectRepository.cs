@@ -10,6 +10,7 @@ namespace ProjectManager.Core.Models.Interfaces.Repositories
 {
     public interface IProjectRepository : IRepository<Project>
     {
+        public Result<bool> DeleteProjectMemberById(int id);
         public Result<ProjectMember> GetProjectMember(int projectId, int userId);
         public List<Project> GetMyProjects(int userId);
         public List<Project> GetOtherProjects(int userId);

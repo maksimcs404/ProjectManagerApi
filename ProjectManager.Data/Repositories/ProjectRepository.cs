@@ -20,6 +20,17 @@ namespace ProjectManager.Data.Repositories
         {
             _projectMembers = context.Set<ProjectMember>();
         }
+        public Result<bool> DeleteProjectMemberById(int id)
+        {
+            var member = _projectMembers.FirstOrDefault(x => x.Id == id);
+            if (member == null)
+            {
+                return Result<bool>.Fail("Project member not found.");
+            }
+            _projectMembers.Remove(member);
+            _context.SaveChanges();
+            return Result<bool>.Ok(true);
+        }
         public Result<ProjectMember> GetProjectMember(int projectId, int userId)
         {
             var projectMember = _projectMembers.FirstOrDefault(pm => pm.ProjectId == projectId && pm.UserId == userId);

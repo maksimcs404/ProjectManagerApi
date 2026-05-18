@@ -29,15 +29,18 @@ namespace ProjectManager.Data.Context
             modelBuilder.Entity<ProjectTask>()
                 .HasOne(pt => pt.Project)
                 .WithMany(p => p.ProjectTasks)
-                .HasForeignKey(p => p.ProjectId);
+                .HasForeignKey(p => p.ProjectId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<ProjectMember>()
                 .HasOne(pm => pm.User)
-                .WithMany(u => u.ProjectMembers);
-
+                .WithMany(u => u.ProjectMembers)
+                .OnDelete(DeleteBehavior.Cascade);
+                
             modelBuilder.Entity<ProjectMember>()
                 .HasOne(pm => pm.Project)
-                .WithMany(p => p.ProjectMembers);
+                .WithMany(p => p.ProjectMembers)
+                .OnDelete(DeleteBehavior.Cascade);
         }
 
 

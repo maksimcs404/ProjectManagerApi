@@ -9,6 +9,8 @@ namespace ProjectManager.Application.Interfaces
 {
     public interface IProjectService
     {
+        Result<bool> DeleteProjectMemberById(int id);
+        Result<bool> DeleteProjectById(int projectId);
         Result<Project> CreateProject(int ownerId, string title, string? description);
         Result<List<Project>> GetMyProjects(int userId);
         Result<ProjectMember> AddMemberToProject(int projectId, int userId, MemberRole role);

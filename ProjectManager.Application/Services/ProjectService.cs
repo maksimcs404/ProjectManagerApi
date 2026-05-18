@@ -17,6 +17,20 @@ namespace ProjectManager.Application.Services
         {
             _projectRepository = projectRepository;
         }
+        public Result<bool> DeleteProjectMemberById(int id)
+        {
+            var result = _projectRepository.DeleteProjectMemberById(id);
+            if (!result.IsSuccess)
+                return Result<bool>.Fail(result.Error!);
+            return Result<bool>.Ok(true);
+        }
+        public Result<bool> DeleteProjectById(int projectId)
+        {
+            var result = _projectRepository.Delete(projectId);
+            if (!result.IsSuccess)
+                return Result<bool>.Fail(result.Error!);
+            return Result<bool>.Ok(true);
+        }
         public Result<Project> GetProjectById(int projectId)
         {
             var project = _projectRepository.Get(projectId);

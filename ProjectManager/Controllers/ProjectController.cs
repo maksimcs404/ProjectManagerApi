@@ -41,8 +41,6 @@ namespace ProjectManager.Controllers
             }
 
         }
-
-        [Authorize]
         [HttpGet("projects")]
         public IActionResult GetAllProject()
         {
@@ -65,29 +63,27 @@ namespace ProjectManager.Controllers
                 return StatusCode(500, "An error occurred while retrieving projects: " + ex.Message);
             }
         }
-        [Authorize]
         [HttpPost("{id}/members")]
         public IActionResult AddMemberToProject(int id, [FromBody] AddMemberRequest request)
         {
             try
             {
-                Console.WriteLine("1");
-                int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+                var claim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (!int.TryParse(claim, out int userId))
+                    return Unauthorized("User ID not found in token.");
 
                 var isOwnerResult = _projectService.IsOwnerOfTheProject(userId, id);
-
-                if (userId == request.userId)
-                    return BadRequest("You cannot add yourself as a member."); 
-                if (!isOwnerResult.IsSuccess)
-                    return StatusCode(403, "Only project owner can add members.");
-
                 if (userId == 0)
                     return Unauthorized("User ID not found in token.");
+                if (userId == request.userId)
+                    return BadRequest("You cannot add yourself as a member.");
+                if (!isOwnerResult.IsSuccess)
+                    return StatusCode(403, "Only project owner can add members.");
+                
 
                 var result = _projectService.AddMemberToProject(id, request.userId, request.Role);
                 if (!result.IsSuccess)
                 {
-                    Console.WriteLine("1");
                     return StatusCode(400, result.Error);
                 }
                 return Ok(result.Data);
@@ -98,6 +94,45 @@ namespace ProjectManager.Controllers
                 return StatusCode(500, "An error occurred while adding member to project: " + ex.Message);
             }
         }
+        [HttpDelete("{projectId}/members/{memberId}")]
+        public IActionResult DeleteMember(int projectId, int memberId)
+        {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            if (memberId == userId)
+            {
+                return BadRequest("You cannot remove yourself from the project.");
+            }
+            if (!_projectService.IsOwnerOfTheProject(userId, projectId).IsSuccess)
+            {
+                return StatusCode(403, "Only project owner can delete members.");
+            }
+            if (_projectService.DeleteProjectMemberById(memberId).IsSuccess)
+            {
+                return Ok();
+            }
+            else
+            {
+                return StatusCode(500, "Something went wrong while deleting the member.");
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteProject(int id)
+        {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+            if (!_projectService.IsOwnerOfTheProject(userId, id).IsSuccess)
+            {
+                return StatusCode(403, "Only project owner can delete the project.");
+            } 
+            var result = _projectService.DeleteProjectById(id);
+            if (!result.IsSuccess)
+            {
+                return StatusCode(500, result.Error);
+            }
+            return Ok();
+        }
+        
     }
         
 }
