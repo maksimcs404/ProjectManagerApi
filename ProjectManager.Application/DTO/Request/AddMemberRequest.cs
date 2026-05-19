@@ -10,7 +10,6 @@ namespace ProjectManager.Application.DTO.Request
     {
         public int userId { get; set; }
 
-        [JsonConverter(typeof(JsonStringEnumConverter))]
         public MemberRole Role { get; set; }
     }
 }

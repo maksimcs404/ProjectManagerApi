@@ -14,11 +14,11 @@ namespace ProjectManager.Core.Models.Domain
         private const int MaxDescriptionLength = 256;
 
 
-        public int Id { get; private set; }
-        public int OwnerId { get; private set; }
-        public string Title { get; private set; }
-        public string? Description { get; private set; } = string.Empty;
-        public User Owner { get; private set; }
+        public int Id { get; set; }
+        public int OwnerId { get; set; }
+        public string Title { get; set; }
+        public string? Description { get; set; } = string.Empty;
+        public User Owner { get; set; }
         public List<ProjectTask> ProjectTasks { get; set; } = null!;
         public List<ProjectMember> ProjectMembers { get; set; } = null!;
 

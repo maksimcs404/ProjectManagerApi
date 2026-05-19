@@ -21,6 +21,33 @@ namespace ProjectManager.Controllers
             _projectService = _service;
         }
 
+        [HttpPut("{id}")]
+        public IActionResult UpdateProject(int id, [FromBody] UpdateProjectRequest request)
+        {
+            try
+            {
+                var claim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (!int.TryParse(claim, out int userId))
+                    return Unauthorized("User ID not found in token.");
+
+                var result = _projectService.GetProjectById(id);
+                if (!result.IsSuccess)
+                    return NotFound("Project not found.");
+
+                if (userId != result.Data!.OwnerId)
+                    return StatusCode(403, "Only project owner can update the project.");
+
+                var updateResult = _projectService.UpdateProject(request, id);
+                if (!updateResult.IsSuccess)
+                    return StatusCode(422, updateResult.Error);
+
+                return Ok(updateResult.Data);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred: " + ex.Message);
+            }
+        }
 
         [HttpPost("create")]
         public IActionResult CreateProject([FromBody] CreateProjectRequest request)

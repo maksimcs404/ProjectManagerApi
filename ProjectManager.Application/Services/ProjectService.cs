@@ -1,4 +1,5 @@
-﻿using ProjectManager.Application.Interfaces;
+﻿using ProjectManager.Application.DTO.Request;
+using ProjectManager.Application.Interfaces;
 using ProjectManager.Core.Models.Common;
 using ProjectManager.Core.Models.Common.Enums;
 using ProjectManager.Core.Models.Domain;
@@ -16,6 +17,25 @@ namespace ProjectManager.Application.Services
         public ProjectService(IProjectRepository projectRepository)
         {
             _projectRepository = projectRepository;
+        }
+        public Result<Project> UpdateProject(UpdateProjectRequest request, int projectId)
+        {
+            var existingProjectResult = _projectRepository.Get(projectId);
+            if (existingProjectResult == null || existingProjectResult == default)
+            {
+                return Result<Project>.Fail("Project not found.");
+            }
+            if (request.Title != null)
+            {
+                existingProjectResult.Title = request.Title;
+            }
+            if (request.Description != null)
+            {
+                existingProjectResult.Description = request.Description;
+            }
+            return _projectRepository.UpdateProject(existingProjectResult);
+
+
         }
         public Result<bool> DeleteProjectMemberById(int id)
         {

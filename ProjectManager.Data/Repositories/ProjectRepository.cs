@@ -20,6 +20,18 @@ namespace ProjectManager.Data.Repositories
         {
             _projectMembers = context.Set<ProjectMember>();
         }
+        public Result<Project> UpdateProject(Project project)
+        {
+            var existingProject = _dbSet.FirstOrDefault(p => p.Id == project.Id);
+            if (existingProject == null || existingProject == default)
+            {
+                return Result<Project>.Fail("Project not found.");
+            }
+            existingProject.Title = project.Title;
+            existingProject.Description = project.Description;
+            _context.SaveChanges();
+            return Result<Project>.Ok(existingProject);
+        }
         public Result<bool> DeleteProjectMemberById(int id)
         {
             var member = _projectMembers.FirstOrDefault(x => x.Id == id);

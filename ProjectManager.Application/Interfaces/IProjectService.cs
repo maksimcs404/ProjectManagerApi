@@ -1,4 +1,5 @@
-﻿using ProjectManager.Core.Models.Common;
+﻿using ProjectManager.Application.DTO.Request;
+using ProjectManager.Core.Models.Common;
 using ProjectManager.Core.Models.Common.Enums;
 using ProjectManager.Core.Models.Domain;
 using System;
@@ -9,6 +10,7 @@ namespace ProjectManager.Application.Interfaces
 {
     public interface IProjectService
     {
+        Result<Project> UpdateProject(UpdateProjectRequest request, int projectId);
         Result<bool> DeleteProjectMemberById(int id);
         Result<bool> DeleteProjectById(int projectId);
         Result<Project> CreateProject(int ownerId, string title, string? description);
