@@ -50,7 +50,7 @@ namespace ProjectManager.Data.Repositories.Common
             try
             {
                 var existingEntity = _dbSet.FirstOrDefault(e => e.Id == id);
-                if (existingEntity != null || existingEntity != default)
+                if (existingEntity != null)
                 {
                     _dbSet.Remove(existingEntity);
                     _context.SaveChanges();
