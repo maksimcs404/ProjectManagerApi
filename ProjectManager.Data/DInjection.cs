@@ -16,7 +16,7 @@ namespace ProjectManager.Data
         {
             services.AddDbContext<EfContext>(options => options.UseNpgsql(connectionString));
             services.AddScoped<IProjectRepository, ProjectRepository>();
-            //services.AddScoped<ITaskRepository, TaskRepository>(); // TODO: доделать
+            services.AddScoped<ITaskRepository, TaskRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             
             return services;

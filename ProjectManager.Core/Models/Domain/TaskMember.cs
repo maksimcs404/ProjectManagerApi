@@ -14,6 +14,7 @@ namespace ProjectManager.Core.Models.Domain
         public MemberRole Role { get; private set; }
         public int TaskId { get; private set; }
 
+        public ProjectTask Task { get; set; }
         public User User { get; private set; } = null!;
 
         private TaskMember(int id, int userId, MemberRole role, int taskId)

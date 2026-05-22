@@ -21,12 +21,14 @@ namespace ProjectManager.Core.Models.Domain
         public TaskPriority Priority { get; private set; }
         public int ProjectId { get; private set; }
         public DateTime CreatedAt { get; private set; }
+        public int OwnerId { get; set; }
+        public User Owner { get; set; }
         public List<TaskMember> TaskMembers { get; private set; } = new();
         public List<Comment> Comments { get; private set; } = new();
         public Project Project { get; private set; }
 
         private ProjectTask(int id, DateTime? deadLine, string title, string? description, int projectId, DateTime createdAt,
-            Common.Enums.TaskStatus status, TaskPriority priority)
+            Common.Enums.TaskStatus status, TaskPriority priority, int ownerId)
         {
             Id = id;
             DeadLine = deadLine;
@@ -36,6 +38,7 @@ namespace ProjectManager.Core.Models.Domain
             CreatedAt = createdAt;
             Status = status;
             Priority = priority;
+            OwnerId = ownerId;
         }
         
         public static Result<ProjectTask> Create(DateTime? deadLine, string title, string? description, int projectId, int ownerId,
@@ -51,7 +54,7 @@ namespace ProjectManager.Core.Models.Domain
             if (description != null && description.Length > MaxDescriptionLength)
                 return Result<ProjectTask>.Fail("Description cannot exceed 256 characters.");
 
-            var task = new ProjectTask(0, deadLine, title, description, projectId, DateTime.Now, status, priority);
+            var task = new ProjectTask(0, deadLine, title, description, projectId, DateTime.UtcNow, status, priority, ownerId);
             return Result<ProjectTask>.Ok(task);
         }
     }

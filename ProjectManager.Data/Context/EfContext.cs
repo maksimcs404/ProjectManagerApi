@@ -27,6 +27,12 @@ namespace ProjectManager.Data.Context
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<ProjectTask>()
+                .HasOne(pt => pt.Owner)
+                .WithMany(o => o.ProjectTasks)
+                .HasForeignKey(pt => pt.OwnerId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ProjectTask>()
                 .HasOne(pt => pt.Project)
                 .WithMany(p => p.ProjectTasks)
                 .HasForeignKey(p => p.ProjectId)

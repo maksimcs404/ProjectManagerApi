@@ -20,6 +20,8 @@ namespace ProjectManager.Core.Models.Domain
         public DateTime? CreatedAt { get; private set; }
         public List<Project> Projects { get; set; } = new List<Project>();
         public List<ProjectMember> ProjectMembers { get; private set; } = null!;
+        public List<TaskMember> TaskMembers { get; set; }
+        public List<ProjectTask> ProjectTasks { get; set; }
         
         protected User() { }
         private User (int id, string name, string userName, string password, DateTime? createdAt)

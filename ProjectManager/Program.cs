@@ -15,6 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDataLayer(builder.Configuration.GetConnectionString("DefaultConnection")!);
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddScoped<ITaskService, TaskService>();
 builder.Services.AddControllers().AddJsonOptions(options => 
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
