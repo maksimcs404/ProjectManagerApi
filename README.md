@@ -1,3 +1,14 @@
+# ProjectManager API
+Backend API for project/task management with JWT auth, project members, comments, and comment likes.
+## Stack
+- ASP.NET Core
+- Entity Framework Core
+- PostgreSQL (Npgsql)
+- xUnit + Moq
+## Run
+1. Set environment variable for DB connection string:
+   - `ConnectionStrings__DefaultConnection=Host=localhost;Database=ProjectManager;Username=postgres;Password=your_password`
+2. Run migrations (if needed):
    - `dotnet ef database update`
 3. Start API:
    - `dotnet run --project ProjectManager`
