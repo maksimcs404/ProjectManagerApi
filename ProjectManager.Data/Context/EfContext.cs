@@ -38,6 +38,18 @@ namespace ProjectManager.Data.Context
                 .HasForeignKey(p => p.ProjectId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<Comment>()
+                .HasOne<ProjectTask>()
+                .WithMany(t => t.Comments)
+                .HasForeignKey(c => c.TaskId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Comment>()
+                .HasOne(c => c.User)
+                .WithMany()
+                .HasForeignKey(c => c.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<ProjectMember>()
                 .HasOne(pm => pm.User)
                 .WithMany(u => u.ProjectMembers)

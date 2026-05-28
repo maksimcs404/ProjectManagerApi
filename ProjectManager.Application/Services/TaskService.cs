@@ -53,5 +53,25 @@ namespace ProjectManager.Application.Services
 
             return _repository.Create(task.Data!);
         }
+
+        public Result<Comment> AddComment(int taskId, int userId, CreateCommentRequest request)
+        {
+            return _repository.AddComment(taskId, userId, request.Data, request.Title);
+        }
+
+        public Result<List<Comment>> GetTaskComments(int taskId)
+        {
+            return _repository.GetTaskComments(taskId);
+        }
+
+        public Result<CommentLike> AddLikeToComment(int commentId, int userId)
+        {
+            return _repository.AddLikeToComment(commentId, userId);
+        }
+
+        public Result<Comment> GetCommentById(int commentId)
+        {
+            return _repository.GetCommentById(commentId);
+        }
     }
 }

@@ -17,17 +17,20 @@ namespace ProjectManager.Core.Models.Domain
         public string Data { get; private set; }
         public string? Title { get; private set; }
         public int TaskId { get; private set; }
+        public int UserId { get; private set; }
+        public User User { get; private set; } = null!;
 
-        private Comment(int id, DateTime createdAt, string data, string title, int taskId)
+        private Comment(int id, DateTime createdAt, string data, string title, int taskId, int userId)
         {
             Id = id;
             CreatedAt = createdAt;
             Data = data;
             Title = title;
             TaskId = taskId;
+            UserId = userId;
         }
 
-        public static Result<Comment> Create(string data, string title, int taskId)
+        public static Result<Comment> Create(string data, string title, int taskId, int userId)
         {
             // Validate data
             if (string.IsNullOrEmpty(data) || data.Length < MinDataLength || data.Length > MaxDataLength)
@@ -40,7 +43,7 @@ namespace ProjectManager.Core.Models.Domain
             {
                 return Result<Comment>.Fail($"Title must be at most {MaxTitleLength} characters.");
             }
-            return Result<Comment>.Ok(new Comment(0, DateTime.UtcNow, data, title, taskId));
+            return Result<Comment>.Ok(new Comment(0, DateTime.UtcNow, data, title, taskId, userId));
         }
     }
 }

@@ -70,6 +70,39 @@ namespace ProjectManager.Application.Services
             else return Result<bool>.Ok(true);
 
         }
+        public Result<bool> HasReadAccessToProject(int userId, int projectId)
+        {
+            var projectResult = GetProjectById(projectId);
+            if (!projectResult.IsSuccess)
+                return Result<bool>.Fail(projectResult.Error!);
+
+            if (projectResult.Data!.OwnerId == userId)
+                return Result<bool>.Ok(true);
+
+            var memberResult = _projectRepository.GetProjectMember(projectId, userId);
+            if (!memberResult.IsSuccess)
+                return Result<bool>.Fail("User has no access to this project.");
+
+            return Result<bool>.Ok(true);
+        }
+        public Result<bool> HasWriteAccessToProject(int userId, int projectId)
+        {
+            var projectResult = GetProjectById(projectId);
+            if (!projectResult.IsSuccess)
+                return Result<bool>.Fail(projectResult.Error!);
+
+            if (projectResult.Data!.OwnerId == userId)
+                return Result<bool>.Ok(true);
+
+            var memberResult = _projectRepository.GetProjectMember(projectId, userId);
+            if (!memberResult.IsSuccess)
+                return Result<bool>.Fail("User has no access to this project.");
+
+            if (memberResult.Data!.Role == MemberRole.Viewer)
+                return Result<bool>.Fail("Viewer has no write access.");
+
+            return Result<bool>.Ok(true);
+        }
         public Result<Project> CreateProject(int ownerId, string title, string? description)
         {
             var projectResult = Project.Create(ownerId, title, description);
@@ -82,16 +115,16 @@ namespace ProjectManager.Application.Services
         }
         public Result<ProjectMember> AddMemberToProject(int projectId, int userId, MemberRole role)
         {
-            var result = _projectRepository.AddMemberToProject(userId, projectId, role);
-            if (!result.IsSuccess)
-            {
-                return Result<ProjectMember>.Fail(result.Error!);
-            }
-
             var existUser = _projectRepository.GetProjectMember(projectId, userId);
             if (existUser.IsSuccess)
             {
                 return Result<ProjectMember>.Fail("User is already exist in the project.");
+            }
+
+            var result = _projectRepository.AddMemberToProject(userId, projectId, role);
+            if (!result.IsSuccess)
+            {
+                return Result<ProjectMember>.Fail(result.Error!);
             }
             return Result<ProjectMember>.Ok(result.Data!);
         }

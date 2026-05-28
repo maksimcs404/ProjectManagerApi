@@ -18,5 +18,7 @@ namespace ProjectManager.Application.Interfaces
         Result<ProjectMember> AddMemberToProject(int projectId, int userId, MemberRole role);
         Result<Project> GetProjectById(int projectId);
         Result<bool> IsOwnerOfTheProject(int userId, int projectId);
+        Result<bool> HasReadAccessToProject(int userId, int projectId);
+        Result<bool> HasWriteAccessToProject(int userId, int projectId);
     }
 }

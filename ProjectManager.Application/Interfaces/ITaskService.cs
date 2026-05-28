@@ -12,5 +12,9 @@ namespace ProjectManager.Application.Interfaces
         ProjectTask? Get(int id);
         Result<ProjectTask> Create(CreateTaskRequest request, int ownerId, int projectId);
         Result<List<ProjectTask>> GetAll(int userId);
+        Result<Comment> AddComment(int taskId, int userId, CreateCommentRequest request);
+        Result<List<Comment>> GetTaskComments(int taskId);
+        Result<CommentLike> AddLikeToComment(int commentId, int userId);
+        Result<Comment> GetCommentById(int commentId);
     }
 }

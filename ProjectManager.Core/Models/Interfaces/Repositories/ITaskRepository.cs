@@ -11,5 +11,9 @@ namespace ProjectManager.Core.Models.Interfaces.Repositories
     {
         Result<List<ProjectTask>> GetAllOwnTasksByUserId(int userId);
         Result<List<ProjectTask>> GetAllOtherTasksByUserId(int userId);
+        Result<Comment> AddComment(int taskId, int userId, string data, string title);
+        Result<List<Comment>> GetTaskComments(int taskId);
+        Result<CommentLike> AddLikeToComment(int commentId, int userId);
+        Result<Comment> GetCommentById(int commentId);
     }
 }
